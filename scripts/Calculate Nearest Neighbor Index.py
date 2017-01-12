@@ -62,6 +62,8 @@ output_fields.append(QgsField('stderr', QVariant.Double))
 # =============================================================================
 # calculate nearest neighbor index
 # =============================================================================
+
+## cria o FID do arquivo de pontos
 writer = VectorWriter(Output_Layer, None, output_fields, QGis.WKBPolygon, polygon_layer.crs())
 polygon_features = processing.features(polygon_layer)
 polygon_count = len(polygon_features)
@@ -71,7 +73,7 @@ for polygon_feature in polygon_features:
     step += 1
     polygon_geom = polygon_feature.geometry()
     
-    # search intersected point features
+    # Procura as feições de pontos intersectadas
     intersects_points = []
     request = QgsFeatureRequest().setFilterRect(polygon_geom.boundingBox())
     point_features = point_layer.getFeatures(request)
@@ -79,7 +81,7 @@ for polygon_feature in polygon_features:
         if polygon_geom.intersects(point_feature.geometry()):
             intersects_points.append(point_feature)
     
-    # calculate nearest distance & nearest neighbor index
+    # Calcula nearest distance & nearest neighbor index
     sum_nearest_dist = 0.0;
     for point_feature in intersects_points:
         min_distance = get_minimum_distance(intersects_points, point_feature)
